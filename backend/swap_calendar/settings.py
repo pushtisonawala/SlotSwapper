@@ -82,10 +82,18 @@ WSGI_APPLICATION = 'swap_calendar.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
+# Parse database URL or use default
+database_config = dj_database_url.parse(
+    config('DATABASE_URL', default='postgresql://neondb_owner:npg_J5BMaYwuUbW9@ep-divine-star-ahonwva6-pooler.c-3.us-east-1.aws.neon.tech/neondb?sslmode=require&channel_binding=require')
+)
+
+# Ensure the engine is explicitly set
+database_config['ENGINE'] = 'django.db.backends.postgresql'
+database_config['CONN_MAX_AGE'] = 600
+database_config['CONN_HEALTH_CHECKS'] = True
+
 DATABASES = {
-    'default': dj_database_url.parse(
-        config('DATABASE_URL', default='postgresql://neondb_owner:npg_J5BMaYwuUbW9@ep-divine-star-ahonwva6-pooler.c-3.us-east-1.aws.neon.tech/neondb?sslmode=require&channel_binding=require')
-    )
+    'default': database_config
 }
 
 # Custom User Model
